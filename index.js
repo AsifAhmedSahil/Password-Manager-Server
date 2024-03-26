@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const bodyParser = require("body-parser")
 const app = express()
@@ -43,6 +43,28 @@ async function run() {
         console.log(password)
         const result = await passwordCollection.insertOne(password)
         res.send(result);
+    })
+
+    app.delete('/passwords/:id' ,async(req,res) =>{
+      const id = req.params.id;
+      console.log(id)
+      const query = {_id: new ObjectId(id)}
+      const result = await passwordCollection.deleteOne(query)
+      res.send(result)
+
+    })
+
+    app.get('/passwords/:id' , async(req,res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await passwordCollection.findOne(query)
+      res.send(result)
+      console.log(result)
+    })
+
+    app.patch('/passwords/:id' , async(req,res) =>{
+      const updateInfo = req.body;
+      console.log(updateInfo)
     })
 
 
