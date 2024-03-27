@@ -63,8 +63,27 @@ async function run() {
     })
 
     app.patch('/passwords/:id' , async(req,res) =>{
-      const updateInfo = req.body;
-      console.log(updateInfo)
+      const item = req.body;
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const updatedDoc = {
+        $set:{
+          site: item.site,
+          username: item.username,
+          pasword: item.password
+        }
+      }
+
+      app.delete('/passowrd/:id',async(req,res) =>{
+        const id = req.params.id;
+        const filter = {id: id}
+        const result = await passwordCollection.deleteOne(filter)
+        res.send(result);
+      })
+
+      const result = await passwordCollection.updateOne(filter,updatedDoc)
+      res.send(result)
+      // console.log(updateInfo)
     })
 
 
